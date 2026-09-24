@@ -142,32 +142,28 @@ nav.toc a.navauto{background:#0b7285;color:#fff;border-color:#0b7285}
 @media (prefers-color-scheme: dark){.ta .ph{background:#0b3d45}}
 @media print{.auto-sec{break-before:page}}
 
-.edit-bar{position:fixed;inset-block-end:20px;inset-inline-end:20px;z-index:50;display:flex;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px;box-shadow:0 6px 24px rgba(0,0,0,.18)}
-.edit-bar button{font:inherit;font-size:.88rem;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;background:var(--bg);color:var(--ink)}
-.edit-bar button.on{background:var(--accent);color:#fff}
-.edit-bar button.primary{background:var(--accent2);color:#fff}
-.edit-hint{display:none;position:fixed;inset-block-start:0;inset-inline:0;z-index:49;background:var(--accent2);color:#fff;text-align:center;font-size:.85rem;padding:6px}
-body.editing .edit-hint{display:block}
-body.editing [contenteditable="true"]{outline:1px dashed var(--accent2);outline-offset:2px}
-body.editing [contenteditable="true"]:focus{outline:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
-.edit-toast{position:fixed;inset-block-end:80px;inset-inline-end:20px;z-index:60;background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:10px;font-size:.88rem;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;max-width:360px}
-.edit-toast.show{opacity:1;transform:none}
-.edit-modal{display:none;position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:20px}
-.edit-modal.show{display:flex}
-.edit-box{background:var(--surface);color:var(--ink);border-radius:14px;padding:18px;width:min(900px,100%);display:flex;flex-direction:column;gap:10px}
-.edit-box h3{margin:0;font-size:1rem}
-.edit-box textarea{width:100%;height:50vh;font-family:Consolas,monospace;font-size:.75rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
-.edit-actions{display:flex;gap:8px;justify-content:flex-end}
-.edit-actions button{font:inherit;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;background:var(--bg);color:var(--ink)}
-.edit-actions button.primary{background:var(--accent2);color:#fff}
-@media print{.edit-bar,.edit-hint,.edit-toast,.edit-modal{display:none!important}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>
 <meta id="dcngeagmmhegagicpcmpinaoklddcgon"/><style></style></head>
 <body>
-<div class="edit-hint" id="editHint">Modo edição ativo — clique em qualquer texto, indicador ou célula de tabela para alterar. As alterações ficam guardadas neste navegador; use “Salvar arquivo” para gerar o .html.</div>
-<div class="edit-bar" id="editBar"><button class="" id="btnEdit" type="button">✏️ Editar textos</button><button class="primary" id="btnSave" type="button">💾 Salvar arquivo</button><button id="btnCopy" type="button">📋 Copiar HTML</button></div>
-<div class="edit-toast" id="editToast"></div>
-<div class="edit-modal" id="editModal"><div class="edit-box"><h3 id="editModalTitle"></h3><textarea id="editModalText" spellcheck="false"></textarea><div class="edit-actions"><button class="primary" id="editModalCopy" type="button">Copiar</button><button id="editModalClose" type="button">Fechar</button></div></div></div>
 <header class="hero"><div class="wrap">
 <h1>Portfólio de Projetos Power BI &amp; Automações</h1>
 <p>Camila Maciel · Especialista em Business Intelligence &amp; Transformação Digital.</p>
@@ -280,34 +276,4 @@ body.editing [contenteditable="true"]:focus{outline:2px solid var(--accent);back
 </section>
 </main>
 <footer>Portfólio de Projetos · Camila Maciel · Dados ilustrativos</footer>
-<script>
-(function(){
-  var SEL='.msg,.arch .node b,.arch .node p,.tl-i b,.tl-i span,.auto-head h2,.auto-head p,.step b,.step p,.rules li,.st,.note-ill,.hero h1,.hero p,.chips span,.notice,.tag,.ph h2,.desc,.kpi span,.kpi b,.kpi small,.card h4,th,td,details summary,details li,footer,nav.toc a';
-  var KEY='portfolio-edits-v1';
-  var btn=document.getElementById('btnEdit'),save=document.getElementById('btnSave'),copyB=document.getElementById('btnCopy'),on=false;
-  function els(){return Array.prototype.slice.call(document.querySelectorAll(SEL));}
-  var orig=els().map(function(e){return e.innerHTML;});
-  function toast(m){var t=document.getElementById('editToast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},4500);}
-  function store(){try{var d={};els().forEach(function(e,i){if(e.innerHTML!==orig[i])d[i]=e.innerHTML;});localStorage.setItem(KEY,JSON.stringify(d));}catch(x){}}
-  try{var saved=JSON.parse(localStorage.getItem(KEY)||'{}');var L=els();var n=0;Object.keys(saved).forEach(function(i){if(L[i]){L[i].innerHTML=saved[i];n++;}});if(n)setTimeout(function(){toast('Recuperei '+n+' edição(ões) salvas neste navegador.');},300);}catch(x){}
-  function setEdit(v){on=v;document.body.classList.toggle('editing',v);btn.classList.toggle('on',v);
-    btn.textContent=v?'✅ Concluir edição':'✏️ Editar textos';
-    els().forEach(function(el){if(v){el.setAttribute('contenteditable','true');}else{el.removeAttribute('contenteditable');}});}
-  btn.addEventListener('click',function(){setEdit(!on);});
-  document.addEventListener('input',function(){store();});
-  document.addEventListener('click',function(e){if(on&&e.target.closest('nav.toc a,summary')){e.preventDefault();}},true);
-  function fullHTML(){var was=on;setEdit(false);var h='<!DOCTYPE html>\n'+document.documentElement.outerHTML;if(was)setEdit(true);return h;}
-  function showModal(txt,title){var m=document.getElementById('editModal');document.getElementById('editModalTitle').textContent=title;var ta=document.getElementById('editModalText');ta.value=txt;m.classList.add('show');ta.focus();ta.select();
-    try{navigator.clipboard.writeText(txt).then(function(){toast('Copiado para a área de transferência.');},function(){});}catch(x){}}
-  document.getElementById('editModalClose').addEventListener('click',function(){document.getElementById('editModal').classList.remove('show');});
-  document.getElementById('editModalCopy').addEventListener('click',function(){var ta=document.getElementById('editModalText');ta.select();try{document.execCommand('copy');toast('Copiado! Cole no Bloco de Notas e salve como .html');}catch(x){}});
-  save.addEventListener('click',async function(){
-    var html=fullHTML(),name='Portfolio_Power_BI_editado.html';
-    if(window.showSaveFilePicker){try{var h=await window.showSaveFilePicker({suggestedName:name,types:[{description:'Página HTML',accept:{'text/html':['.html']}}]});var w=await h.createWritable();await w.write(html);await w.close();toast('Arquivo salvo com sucesso!');return;}catch(e){if(e&&e.name==='AbortError')return;}}
-    try{var blob=new Blob([html],{type:'text/html;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
-      toast('Download iniciado ('+name+'). Se nada aparecer, use “Copiar HTML”.');}catch(e){showModal(html,'Copie o código abaixo e salve como .html');}
-  });
-  copyB.addEventListener('click',function(){showModal(fullHTML(),'Código completo da página — cole no Bloco de Notas e salve como Portfolio.html');});
-})();
-</script>
 </body></html>
